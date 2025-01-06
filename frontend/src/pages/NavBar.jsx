@@ -46,8 +46,8 @@ const NavBar = () => {
         <li>All Pages <i className="ri-arrow-down-s-line"></i></li>
         <i className="ri-search-line"></i>
       </ul>
-      <div className='flex items-center gap-2'>
-        {isLoggedIn && <span className="text-white mr-4">Hello, {user.fullname.firstname}</span>}
+      <div className='flex items-center'>
+        {isLoggedIn && <span className="text-white mr-4">Hello, {user.fullname.firstname} </span>}
         <button
           className="bg-[#0076b681] hover:bg-[#0077B6] text-white px-5 py-3 rounded"
           onClick={isLoggedIn ? handleLogout : handleLogin}
