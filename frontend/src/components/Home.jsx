@@ -7,7 +7,7 @@ import ExploreJobSearch from "../pages/ExploreJobSearch";
 
 const Home = () => {
     return (
-        <header className="flex justify-between flex-col text-white py-6 gap-4 px-6">
+        <header className="flex justify-between items-center flex-col text-white py-6 gap-20 px-6">
             <NavBar />
             <MainSection />
             <TrendingJobs />

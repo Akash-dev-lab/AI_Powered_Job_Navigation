@@ -26,7 +26,7 @@ const TrendingJobs = () => {
   ];
 
   return (
-    <section className="py-10 bg-[#CAF0F8]">
+    <section className="py-10 w-[80%] bg-[#CAF0F8]">
       <div className="container mx-auto px-6">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">

@@ -8,8 +8,9 @@ const App = () => {
   return (
     <div className='bg-[#CAF0F8]'>
       <Routes>
-        <Route path='/' element={<Login />} />
+        <Route path='/' element={<Home />} />
         <Route path='/home' element={<UserProtectedWrapper><Home /></UserProtectedWrapper>} />
+        <Route path='/login' element={<Login />} />
       </Routes>
     </div>
   )

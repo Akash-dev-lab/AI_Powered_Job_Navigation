@@ -42,7 +42,7 @@ const JobOffers = () => {
   ];
 
   return (
-    <section className="py-12 bg-[#CAF0F8]">
+    <section className="py-12 w-[80%] bg-[#CAF0F8]">
       <div className="container mx-auto px-6">
         {/* Header */}
         <div className="text-center mb-8">
