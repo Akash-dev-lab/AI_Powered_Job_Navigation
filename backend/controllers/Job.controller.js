@@ -1,65 +1,132 @@
+const Job = require('../models/job.model');
+const { body } = require('express-validator');
 
-const getRecommendations = async (skills, roles, industries) => {
-    // Mock logic: Replace with NLP-based job matching logic
-    return [
-      { title: "Software Engineer", company: "TechCorp", location: "Remote" },
-      { title: "Data Scientist", company: "DataLabs", location: "New York" },
-    ];
-  };
+// Create a new job post (admin only)
+module.exports.createJob = async (req, res) => {
+  try {
+    const { title, description, requirements } = req.body;
+    const adminId = req.adminId; // From the verifyToken middleware
+
+    const job = new Job({
+      adminId,
+      title,
+      description,
+      requirements,
+    });
+
+    await job.save();
+
+     // Emit a Socket.io event
+     io.emit('newJob', job); // Broadcast to all clients
+
+    res.status(201).json({ message: 'Job created successfully', job });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+// Update a job post (admin only)
+module.exports.updateJob = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, description, requirements } = req.body;
+    const adminId = req.adminId;
+
+    // Check if the job belongs to the admin
+    const job = await Job.findOne({ _id: id, adminId });
+    if (!job) {
+      return res.status(404).json({ message: 'Job not found or unauthorized' });
+    }
+
+    // Update job fields
+    job.title = title || job.title;
+    job.description = description || job.description;
+    job.requirements = requirements || job.requirements;
+
+    await job.save();
+    res.status(200).json({ message: 'Job updated successfully', job });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+// Fetch all jobs for users
+module.exports.getAllJobs = async (req, res) => {
+  try {
+    const jobs = await Job.find().select('-applications'); // Exclude applications for users
+    res.status(200).json({ jobs });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+// Fetch a specific job with its applications (admin only)
+module.exports.getJobById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const adminId = req.adminId;
+
+    // Check if the job belongs to the admin
+    const job = await Job.findOne({ _id: id, adminId });
+    if (!job) {
+      return res.status(404).json({ message: 'Job not found or unauthorized' });
+    }
+
+    res.status(200).json({ job });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+// Submit details for a job (user)
+module.exports.submitApplication = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, email, details } = req.body;
+
+    // Find the job
+    const job = await Job.findById(id);
+    if (!job) {
+      return res.status(404).json({ message: 'Job not found' });
+    }
+
+    // Add the application to the job
+    const application = { name, email, details };
+    job.applications.push(application);
+    await job.save();
+
+    
+    // Emit a Socket.io event
+    const io = req.app.get('io'); // Access io from the app
+    io.emit('newApplication', { jobId: id, application });
+
+    res.status(201).json({ message: 'Application submitted successfully', job });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+// Validation rules for user submission
+module.exports.validateSubmission = [
+    body('name').notEmpty().withMessage('Name is required'),
+    body('email').isEmail().withMessage('Invalid email'),
+    body('details').isObject().withMessage('Details must be an object'),
+  ];
+
+// Fetch all applications for a specific job (admin only)
+module.exports.getJobApplications = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const adminId = req.adminId; // From the verifyToken middleware
   
-  // 2. Filter Jobs by Location, Salary, and Role
-  const filterJobs = async (location, salaryRange, roles) => {
-    // Mock logic: Replace with database query
-    return [
-      { title: "Frontend Developer", company: "WebWorks", location: "San Francisco", salary: "$120k-$140k" },
-    ];
-  };
+      // Check if the job belongs to the admin
+      const job = await Job.findOne({ _id: id, adminId });
+      if (!job) {
+        return res.status(404).json({ message: 'Job not found or unauthorized' });
+      }
   
-  // 3. Save and Bookmark Jobs
-  const saveJob = async (userId, jobId) => {
-    // Mock logic: Replace with database insertion
-    console.log(`Job ${jobId} saved for user ${userId}`);
+      res.status(200).json({ applications: job.applications });
+    } catch (error) {
+      res.status(500).json({ message: 'Server error', error: error.message });
+    }
   };
-  
-  const getBookmarkedJobs = async (userId) => {
-    // Mock logic: Replace with database query
-    return [
-      { title: "Backend Developer", company: "Cloudify", location: "Remote" },
-    ];
-  };
-  
-  // 4. Skill Insights
-  const getSkillInsights = async (jobDescriptions, userSkills) => {
-    // Mock logic: Replace with NLP skill extraction logic
-    return { missingSkills: ["Kubernetes", "Machine Learning"] };
-  };
-  
-  // 5. Job Application Tracker
-  const logApplication = async (userId, applicationDetails) => {
-    // Mock logic: Replace with database insertion
-    console.log(`Application logged for user ${userId}:`, applicationDetails);
-  };
-  
-  const updateApplication = async (userId, applicationId, updates) => {
-    // Mock logic: Replace with database update logic
-    console.log(`Application ${applicationId} updated for user ${userId}:`, updates);
-  };
-  
-  // 6. AI-Powered Resume Fit Score
-  const getResumeFitScore = async (resume, jobDescriptions) => {
-    // Mock logic: Replace with AI-powered scoring logic
-    return { score: 85, feedback: "Improve project descriptions to highlight leadership skills." };
-  };
-  
-  // Export all controllers
-  module.exports = {
-    getRecommendations,
-    filterJobs,
-    saveJob,
-    getBookmarkedJobs,
-    getSkillInsights,
-    logApplication,
-    updateApplication,
-    getResumeFitScore,
-  };
-  

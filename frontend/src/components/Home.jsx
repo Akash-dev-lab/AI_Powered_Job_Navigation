@@ -3,7 +3,9 @@ import NavBar from "../pages/NavBar";
 import MainSection from "../pages/MainSection";
 import TrendingJobs from "../pages/TrandingJobs";
 import JobOffers from "../pages/JobOffers";
+import JobDetails from "../pages/JobDetails";
 import ExploreJobSearch from "../pages/ExploreJobSearch";
+import JobList from "../pages/JobList";
 
 const Home = () => {
     return (
@@ -11,7 +13,8 @@ const Home = () => {
             <NavBar />
             <MainSection />
             <TrendingJobs />
-            <JobOffers />
+            {/* <JobOffers /> */}
+            <JobList />
             <ExploreJobSearch />
         </header>
     );

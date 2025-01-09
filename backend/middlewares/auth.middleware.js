@@ -1,5 +1,4 @@
 const userModel = require('../models/user.model')
-const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const blacklistTokenModel = require('../models/blacklistToken.model')
 
@@ -26,3 +25,19 @@ module.exports.authUser = async (req, res, next) => {
         return res.status(401).json({ message: 'Unauthorized' })
     }
 }
+
+module.exports.authAdmin = (req, res, next) => {
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+  
+    if (!token) {
+      return res.status(401).json({ message: 'Access denied' });
+    }
+  
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      req.adminId = decoded.id;
+      next();
+    } catch (error) {
+      res.status(400).json({ message: 'Invalid token' });
+    }
+  };

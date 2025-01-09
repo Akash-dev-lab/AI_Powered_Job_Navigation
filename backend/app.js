@@ -7,6 +7,8 @@ const connectToDb = require('./db/db')
 const userRoutes = require('./routes/user.routes')
 const cookieParser = require('cookie-parser')
 const morgan = require('morgan')
+const adminRoutes = require('./routes/admin.routes');
+const jobRoutes = require('./routes/job.routes');
 
 connectToDb()
 
@@ -21,5 +23,7 @@ app.get('/', (req, res)=> {
 })
 
 app.use('/users', userRoutes)
+app.use('/admin', adminRoutes)
+app.use('/job', jobRoutes)
 
 module.exports = app
