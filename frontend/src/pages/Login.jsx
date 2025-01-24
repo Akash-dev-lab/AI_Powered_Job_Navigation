@@ -34,10 +34,18 @@ const Login = () => {
     }
   }
 
+  const AdminLogin = () => {
+    navigate('/admin-login')
+  }
+
   return (
     <div>
-      <nav className='px-20 py-2'>
-        <img className='w-12 ' src={Image} alt="" />
+      <nav className='py-2 flex w-full md:w-[80%] mx-auto max-md:w-[80%] justify-between items-center px-4 md:px-20 rounded-full sticky top-1 bg-[#0096C7] z-50'>
+        <img className='w-12' src={Image} alt="" />
+
+        <button onClick={AdminLogin} className='bg-transparent border text-white text-sm  border-white rounded px-4 py-3'>
+          Admin Login
+        </button>
       </nav>
     <div className="flex items-center justify-center h-[840px] text-blue-500">
       <div className="w-full max-w-md p-8 rounded-lg shadow-lg bg-gradient-to-b bg-[#c2dde6]">

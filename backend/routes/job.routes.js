@@ -1,12 +1,13 @@
 const express = require('express');
 const jobController = require('../controllers/Job.controller');
 const { authAdmin } = require('../middlewares/auth.middleware');
-const { body, validationResult } = require('express-validator');
+const { authUser } = require('../middlewares/auth.middleware');
+const { validationResult } = require('express-validator');
 
 const router = express.Router();
 
-// Create a new job post (admin only)
-router.post('/jobs', authAdmin, jobController.createJob);
+// Create a new job post
+router.post('/post', authUser, jobController.postJob);
 
 // Update a job post (admin only)
 router.put('/jobs/:id', authAdmin, jobController.updateJob);
@@ -18,10 +19,10 @@ router.get('/jobs', jobController.getAllJobs);
 router.get('/jobs/:id', authAdmin, jobController.getJobById);
 
 // Submit details for a job (user)
-router.post('/jobs/:id/apply', jobController.submitApplication);
+router.post('/apply/:id', jobController.applyForJob);
 
 router.post(
-    '/jobs/:id/apply',
+    '/apply/:id',
     jobController.validateSubmission,
     (req, res, next) => {
       const errors = validationResult(req);
@@ -30,10 +31,7 @@ router.post(
       }
       next();
     },
-    jobController.submitApplication
+    jobController.applyForJob
   );
-
-// Fetch all applications for a specific job (admin only)
-router.get('/jobs/:id/applications', authAdmin, jobController.getJobApplications);
 
 module.exports = router;

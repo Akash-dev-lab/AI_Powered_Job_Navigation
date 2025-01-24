@@ -2,7 +2,7 @@ import React from 'react'
 
 const ExploreJobSearch = () => {
   return (
-    <div class="flex w-[80%] flex-wrap md:flex-nowrap gap-6 p-6">
+    <>
   {/* <!-- Left Component --> */}
   <div class="flex-1 bg-white shadow-lg rounded-lg p-6">
     <h2 class="text-xl font-semibold mb-4">Explore suggested job searches</h2>
@@ -72,7 +72,7 @@ const ExploreJobSearch = () => {
       </div>
     </div>
   </div>
-</div>
+</>
 
   )
 }

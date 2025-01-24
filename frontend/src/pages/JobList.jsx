@@ -44,7 +44,7 @@ const JobList = () => {
   }, []);
 
   return (
-    <div className='text-black flex gap-6 flex-col'>
+    <>
       <h1>Job List</h1>
       {jobs.map((job) => (
         <div key={job._id}>
@@ -53,7 +53,7 @@ const JobList = () => {
           <p>Applications: {job.applications}</p>
         </div>
       ))}
-    </div>
+    </>
   );
 };
 
