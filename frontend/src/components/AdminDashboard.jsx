@@ -7,8 +7,6 @@ const AdminDashboard = () => {
 
   const { admin } = useAdmin()
 
-  console.log(admin)
-
   const navigate = useNavigate();
 
   const handleLogout = () => {

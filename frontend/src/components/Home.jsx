@@ -67,7 +67,7 @@ const Home = () => {
       <div className="max-sm:w-full max-sm:mt-20 w-[80%] bg-[#CAF0F8]" ref={trendingJobsRef}>
         <TrendingJobs />
       </div>
-      <div className="text-black flex gap-6 flex-col" ref={jobListRef}>
+      <div className="max-sm:w-full max-sm:mt-20 w-[80%] bg-[#CAF0F8]" ref={jobListRef}>
         <JobList />
       </div>
       <div
